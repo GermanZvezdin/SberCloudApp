@@ -12,9 +12,7 @@ struct MypanelView: View {
     @StateObject var AData: AddData
     @State var PlusButton = false
     @ObservedObject var MetricData: MetricsData = MetricsData()
-    
     @AppStorage("X-Subject-Token") var Token = ""
-    
     var body: some View {
         ZStack{
             VStack {
@@ -24,10 +22,18 @@ struct MypanelView: View {
                     }
                 }
             }
-    
+        
         .onDisappear{
             AData.AddState.toggle()
         }
-    }
+        .onAppear {
+            SberCloudApiGetVMNames(token: Token) {
+                (res) in
+                DispatchQueue.main.async {
+                    MetricData.VmName = res[0]
+                }
+            }
+        }
+        }
 }
 }

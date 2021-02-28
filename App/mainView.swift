@@ -71,6 +71,14 @@ struct mainView: View {
                 .edgesIgnoringSafeArea(.top)
         )
         .preferredColorScheme(.light)
+        .onAppear {
+            SberCloudApiGetVMNames(token: Token) {
+                (res) in
+                DispatchQueue.main.async {
+                    MetricData.VmName = res[0]
+                }
+            }
+        }
     }
 }
 
